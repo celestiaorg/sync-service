@@ -128,7 +128,7 @@ func (ps *pubsub) writeMessages() {
 			defer ps.msgsMu.RUnlock()
 
 			for _, msg := range ps.msgs[sub.last:] {
-				err := sub.write(time.Second*5, msg)
+				err := sub.write(time.Minute, msg)
 				if err != nil {
 					log.Warnf("cannot send message to subscriber: %w", err)
 					break
