@@ -11,6 +11,8 @@ import (
 	"nhooyr.io/websocket/wsjson"
 )
 
+const timeout = time.Minute * 5
+
 type connection struct {
 	*websocket.Conn
 	service   Service
@@ -57,7 +59,7 @@ func (c *connection) consumeRequests() error {
 }
 
 func (c *connection) publishHandler(id string, req *PublishRequest) {
-	ctx, cancel := context.WithTimeout(c.ctx, time.Second*10)
+	ctx, cancel := context.WithTimeout(c.ctx, timeout)
 	defer cancel()
 
 	resp := &Response{ID: id}
@@ -113,7 +115,7 @@ func (c *connection) barrierHandler(id string, req *BarrierRequest) {
 }
 
 func (c *connection) signalEntryHandler(id string, req *SignalEntryRequest) {
-	ctx, cancel := context.WithTimeout(c.ctx, time.Second*10)
+	ctx, cancel := context.WithTimeout(c.ctx, timeout)
 	defer cancel()
 
 	resp := &Response{ID: id}
@@ -132,7 +134,7 @@ func (c *connection) consumeResponses() error {
 	for {
 		select {
 		case resp := <-c.responses:
-			err := c.writeTimeout(time.Second*10, resp)
+			err := c.writeTimeout(timeout, resp)
 			if err != nil {
 				return err
 			}
