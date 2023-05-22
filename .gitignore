@@ -27,7 +27,7 @@ node_modules
 /vendor/
 /Godeps/
 
-### IDEA ###
+### IDEA / Goland / JetBrains ###
 .idea/*
 
 ### VisualStudioCode ###
